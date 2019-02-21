@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 WorkingDirectory={{ redhatnordicssa_blog_install_dir }}
-ExecStart=/usr/bin/scl enable {{ redhatnordicssa_blog_ruby_version }} "/opt/rh/{{ redhatnordicssa_blog_ruby_version }}{% if ansible_distribution == "CentOS" %}/root/usr/bin/bundle{% else %}/root/usr/local/bin/bundle{% endif %} exec jekyll serve --host {{ redhatnordicssa_blog_jekyll_listening_address }} --port {{ redhatnordicssa_blog_jekyll_listening_port }} &> /tmp/jekyll.out & echo $! > /var/tmp/jekyll.pid"
+ExecStart=/usr/bin/scl enable {{ redhatnordicssa_blog_ruby_version }} "/opt/rh/{{ redhatnordicssa_blog_ruby_version }}/root/usr/bin/bundle exec jekyll serve --host {{ redhatnordicssa_blog_jekyll_listening_address }} --port {{ redhatnordicssa_blog_jekyll_listening_port }} &> /tmp/jekyll.out & echo $! > /var/tmp/jekyll.pid"
 Type=forking
 PIDFile=/var/tmp/jekyll.pid
 

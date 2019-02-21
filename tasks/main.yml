@@ -70,7 +70,7 @@
     permanent: true
     immediate: true
     state: enabled
-  when: "'firewalld' in services"
+  when: "'firewalld.service' in services"
 
 - name: Install the Jekyll SYSTEMD UNIT file
   template:
