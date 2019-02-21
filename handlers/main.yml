@@ -1,0 +1,6 @@
+# Handlers for ansible-role-redhatnordicssa-blog
+- name: restart jekyll
+  service:
+    name: jekyll
+    daemon_reload: true
+    state: restarted

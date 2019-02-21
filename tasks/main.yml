@@ -1,0 +1,90 @@
+# role tasks
+- name: Populate service facts
+  service_facts:
+
+- include_tasks: "enable-repo-CentOS.yml"
+  when: ansible_distribution == 'CentOS'
+
+- include_tasks: "enable-repo-RedHat.yml"
+  when: ansible_distribution == 'RedHat'
+
+- name: Install the 'Development Tools' package group
+  yum:
+    name: "@Development Tools"
+    state: present
+
+- name: Install other required packages
+  yum:
+    name:
+      - zlib-devel
+      - git
+    state: present
+
+- name: Install ruby from Software collections
+  yum:
+    name:
+      - "{{ redhatnordicssa_blog_ruby_version }}"
+      - "{{ redhatnordicssa_blog_ruby_version }}-rubygem-bundler"
+      - "{{ redhatnordicssa_blog_ruby_version }}-ruby-devel"
+    state: present
+
+- name: Create installation directory
+  file:
+    path: "{{ redhatnordicssa_blog_install_dir }}"
+    state: directory
+    mode: 0755
+
+- name: Install the blog from Git
+  git:
+    repo: "{{ redhatnordicssa_blog_repo }}"
+    clone: true
+    dest: "{{ redhatnordicssa_blog_install_dir }}"
+    version: "{{ redhatnordicssa_blog_version }}"
+  notify:
+    - restart jekyll
+
+- name: Install jekyll using ruby gem
+  gem:
+    name: jekyll
+    state: present
+    version: "{{ redhatnordicssa_blog_jekyll_version }}"
+    user_install: false
+    executable: "scl enable {{ redhatnordicssa_blog_ruby_version }} -- gem"
+
+- name: Install bundler using ruby gem
+  gem:
+    name: bundler
+    state: present
+    user_install: false
+    executable: "scl enable {{ redhatnordicssa_blog_ruby_version }} -- gem"
+
+- name: Install Ruby Gem dependencies using bundler
+  bundler:
+    state: present
+    gemfile: "{{ redhatnordicssa_blog_install_dir }}/Gemfile"
+    executable: "scl enable {{ redhatnordicssa_blog_ruby_version }} -- bundler"
+
+- name: Enable jekyll in Firewalld
+  firewalld:
+    port: "{{ redhatnordicssa_blog_jekyll_listening_port }}/tcp"
+    permanent: true
+    immediate: true
+    state: enabled
+  when: "'firewalld' in services"
+
+- name: Install the Jekyll SYSTEMD UNIT file
+  template:
+    src: jekyll.service.j2
+    dest: /etc/systemd/system/jekyll.service
+    owner: root
+    group: root
+    mode: "u=rw,g=r,o=r"
+  notify:
+    - restart jekyll
+
+- name: Enable and start the jekyll.service
+  service:
+    name: jekyll.service
+    daemon_reload: true
+    state: started
+    enabled: true

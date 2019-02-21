@@ -1,0 +1,4 @@
+- name: Enable software collections
+  package:
+    name: centos-release-scl
+    state: present

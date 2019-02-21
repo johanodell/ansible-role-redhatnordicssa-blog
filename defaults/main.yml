@@ -1,0 +1,11 @@
+# defaults file for ansible-role-redhatnordicssa-blog
+redhatnordicssa_blog_rhsm_repos:
+  - rhel-7-server-rpms
+  - rhel-server-rhscl-7-rpms
+redhatnordicssa_blog_ruby_version: rh-ruby23
+redhatnordicssa_blog_install_dir: /opt/redhatnordicssa_blog
+redhatnordicssa_blog_repo: https://github.com/RedHatNordicsSA/RedHatNordicsSA.github.io.git
+redhatnordicssa_blog_version: master
+redhatnordicssa_blog_jekyll_version: 3.8.5
+redhatnordicssa_blog_jekyll_listening_address: 0.0.0.0
+redhatnordicssa_blog_jekyll_listening_port: 4000

@@ -1,0 +1,5 @@
+- name: Enable a RHSM repositories
+  rhsm_repository:
+    name: "{{ item }}"
+    state: enabled
+  with_items: "{{ redhatnordicssa_blog_rhsm_repos }}"
