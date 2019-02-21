@@ -6,7 +6,7 @@ Basic description for ansible-role-redhatnordicssa-blog
 Requirements
 ------------
 
-Ansible 2.4 or higher
+Ansible 2.5 or higher
 
 Red Hat Enterprise Linux 7 or equivalent
 
@@ -31,6 +31,7 @@ Example Playbook
 
 ```yaml
 - hosts: ansible-role-redhatnordicssa-blog-servers
+  become: true
   roles:
     - role: rhnordics.ansible-role-redhatnordicssa-blog
 ```
@@ -43,4 +44,4 @@ GPLv3
 Author Information
 ------------------
 
-Author Name <authoremail@domain.net>
+Author Name <pgustafs@redhat.com>
